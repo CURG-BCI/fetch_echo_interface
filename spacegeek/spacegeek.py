@@ -49,8 +49,8 @@ def session_ended():
 
 
 if __name__ == '__main__':
-    context = ('host.cert', 'host.key')
     ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2) # use TLS to avoid POODLE
     ctx.load_cert_chain('certificate.pem', 'private-key.pem')
-    app.run(debug=True, host='fyn.cs.columbia.edu', port=80, ssl_context=context)
+    app.run(debug=True, host='fyn.cs.columbia.edu', port=80, ssl_context=ctx
+)
 
