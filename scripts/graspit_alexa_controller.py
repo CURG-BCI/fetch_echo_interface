@@ -2,7 +2,7 @@ import logging
 from random import randint
 
 from flask import Flask, render_template
-import ssl
+import rospy
 from flask_ask import Ask, request, session, question, statement
 
 
@@ -49,8 +49,4 @@ def session_ended():
 
 
 if __name__ == '__main__':
-    ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2) # use TLS to avoid POODLE
-    ctx.load_cert_chain('certificate.pem', 'private-key.pem')
-    app.run(debug=True, host='fyn.cs.columbia.edu', port=80, ssl_context=ctx
-)
-
+    app.run(debug=True, host='fyn.cs.columbia.edu', port=80)
