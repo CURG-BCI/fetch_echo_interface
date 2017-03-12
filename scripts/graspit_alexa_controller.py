@@ -7,12 +7,11 @@ from flask_ask import Ask, request, session, question, statement
 import rospy
 from std_msgs.msg import String
 
-VALID_PHRASES = "valid phrases"
-PUBLISHER = "publisher"
-SUBSCRIBER = "subscriber"
+import IPython
 
 alexa_valid_phrases_topic = "AlexaValidPhrases"
 alexa_detected_phrases_topic = "AlexaDetectedPhrases"
+valid_phrases = ["next grasp"]
 
 app = Flask(__name__)
 ask = Ask(app, "/")
@@ -20,29 +19,24 @@ logging.getLogger('flask_ask').setLevel(logging.DEBUG)
 
 @ask.launch
 def launch():
-    rospy.init_node('graspit_alexa_controller')
-    session.attributes[PUBLISHER] = rospy.Publisher(alexa_detected_phrases_topic, String, queue_size=10)
-    session.attributes[SUBSCRIBER] = rospy.Subscriber(alexa_valid_phrases_topic, String, assign_valid_phrases)
-    if session.attributes[VALID_PHRASES] is None:
-        session.attributes[VALID_PHRASES] = []
-
     help_text = render_template('help_text')
     return statement(help_text)
 
 def assign_valid_phrases(phrases_str_msg):
     phrases_str = phrases_str_msg.data
-    session.attributes[VALID_PHRASES] = phrases_str.split(",")
+    valid_phrases = phrases_str.lower().split(",")
 
 
-@ask.intent('SendCommand', mapping={'command':'Command'})
+@ask.intent('SendCommandIntent', mapping={'command':'Command'})
 def send_instruction(command):
-    if command in session.attribute[VALID_PHRASES]:
-        session.attributes[PUBLISHER].publish(command)
+    print(command)
+    if command in valid_phrases:
+        publisher.publish(command)
         success_msg = render_template('success_msg', command=command)
-        return success_msg
+        return statement(success_msg)
     else:
         invalid_command_msg = render_template('invalid_command_msg', command=command)
-        return invalid_command_msg
+        return statement(invalid_command_msg)
 
 @ask.intent('AMAZON.HelpIntent')
 def help():
@@ -62,4 +56,7 @@ def session_ended():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='fyn.cs.columbia.edu', port=80)
+    rospy.init_node('graspit_alexa_controller')
+    publisher = rospy.Publisher(alexa_detected_phrases_topic, String, queue_size=10)
+    subscriber = rospy.Subscriber(alexa_valid_phrases_topic, String, assign_valid_phrases)
+    app.run(debug=True, host='localhost', port=5000)
