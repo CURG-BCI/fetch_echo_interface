@@ -1,13 +1,16 @@
 {
   "intents": [
-    {
-      "intent": "GetNewFactIntent"
+    { 
+      "intent": "SendCommandIntent",
+      "slots": [
+        {
+          "name": "Command",
+          "type": "COMMANDS"
+        }
+      ]
     },
     {
       "intent": "AMAZON.HelpIntent"
-    },
-    {
-      "intent": "AMAZON.StopIntent"
     },
     {
       "intent": "AMAZON.CancelIntent"

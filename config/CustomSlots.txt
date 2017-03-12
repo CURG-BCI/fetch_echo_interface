@@ -1,0 +1,11 @@
+COMMANDS
+stop
+next grasp
+select grasp
+plan new grasps
+back
+next object
+select object
+rerun vision
+continue
+start over

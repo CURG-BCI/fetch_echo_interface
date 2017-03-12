@@ -1,0 +1,5 @@
+welcome: Welcome to the Alexa Graspit interface. You can tell me any command you see on the Graspit inteface. Such as Next Object or Select Object. What can I help you with?
+bye: Goodbye
+help_text: You can give me any command you see through the Graspit interface. Please tell me your command. 
+success_msg: Successfully sent {{ command }} to the Mico
+invalid_command_msg: Failed to send {{ command }} to the Mico
