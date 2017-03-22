@@ -4,6 +4,7 @@ from random import randint
 
 from flask import Flask, render_template
 from flask_ask import Ask, request, session, question, statement
+from flask_sslify import SSLify
 
 import rospy
 from std_msgs.msg import String
@@ -13,6 +14,7 @@ alexa_detected_phrases_topic = "AlexaDetectedPhrases"
 valid_phrases = []
 
 app = Flask(__name__)
+sslify = SSLify(app)
 ask = Ask(app, "/")
 logging.getLogger('flask_ask').setLevel(logging.DEBUG)
 
@@ -53,9 +55,18 @@ def cancel():
 def session_ended():
     return "", 200
 
+@app.route('/')
+def hello_world():
+    print("REqUest receIVED")
+    return 'Hello, World!'
 
 if __name__ == '__main__':
     rospy.init_node('graspit_alexa_controller')
+    port = rospy.get_param("~port")
+    url = rospy.get_param("~url")
+    print(url, port)
+
     publisher = rospy.Publisher(alexa_detected_phrases_topic, String, queue_size=10)
     subscriber = rospy.Subscriber(alexa_valid_phrases_topic, String, assign_valid_phrases)
-    app.run(debug=True, host='localhost', port=5000)
+
+    app.run(debug=True, host=url, port=port)
