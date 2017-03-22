@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import logging
 from random import randint
 
@@ -7,11 +8,9 @@ from flask_ask import Ask, request, session, question, statement
 import rospy
 from std_msgs.msg import String
 
-import IPython
-
 alexa_valid_phrases_topic = "AlexaValidPhrases"
 alexa_detected_phrases_topic = "AlexaDetectedPhrases"
-valid_phrases = ["next grasp"]
+valid_phrases = []
 
 app = Flask(__name__)
 ask = Ask(app, "/")
