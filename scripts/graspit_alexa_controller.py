@@ -57,14 +57,12 @@ def session_ended():
 
 @app.route('/')
 def hello_world():
-    print("REqUest receIVED")
     return 'Hello, World!'
 
 if __name__ == '__main__':
     rospy.init_node('graspit_alexa_controller')
     port = rospy.get_param("~port")
     url = rospy.get_param("~url")
-    print(url, port)
 
     publisher = rospy.Publisher(alexa_detected_phrases_topic, String, queue_size=10)
     subscriber = rospy.Subscriber(alexa_valid_phrases_topic, String, assign_valid_phrases)
